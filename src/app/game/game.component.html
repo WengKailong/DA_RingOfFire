@@ -1,4 +1,8 @@
-<app-player *ngFor="let player of game.players; let i = index;" class="player-position" [ngStyle]="{'top.px': 100 + i*(120)}" [playerActive] = "i == game.currentPlayer" [name] = "player"></app-player>
+<app-player *ngFor="let player of game.players; let i = index;" class="player-position hide-mobile" [ngStyle]="{'top.px': 100 + i*(120)}" [playerActive] = "i == game.currentPlayer" [name] = "player"></app-player>
+
+<div class="scroll-container">
+<app-player-mobile *ngFor="let player of game.players; let i = index;" class="hide-desktop" [playerActive] = "i == game.currentPlayer" [name] = "player"></app-player-mobile>
+</div>
 
 <div class="field">
   <div class="card-stack">
@@ -28,10 +32,10 @@
     <!--current card animation-->
     <img
       (click)="takeCard()"
-      *ngIf="pickCardAnimation"
+      *ngIf="game.pickCardAnimation"
       class="pick-card"
       style="right: 25px"
-      src="assets/img/{{ currentCard }}.png"
+      src="assets/img/{{ game.currentCard }}.png"
       alt=""
     />
   </div>
@@ -41,4 +45,4 @@
   <mat-icon>add</mat-icon>
 </button>
 
-<app-game-info [card]="currentCard" class="pin-bottom"></app-game-info>
+<app-game-info [card]="game.currentCard" class="pin-bottom"></app-game-info>

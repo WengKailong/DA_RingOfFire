@@ -16,6 +16,9 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { GameInfoComponent } from './game-info/game-info.component';
 import { MatCardModule } from '@angular/material/card';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from '../environments/environment';
+import { PlayerMobileComponent } from './player-mobile/player-mobile.component';
 
 
 @NgModule({
@@ -25,7 +28,8 @@ import { MatCardModule } from '@angular/material/card';
     GameComponent,
     PlayerComponent,
     DialogAddPlayerComponent,
-    GameInfoComponent
+    GameInfoComponent,
+    PlayerMobileComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +41,9 @@ import { MatCardModule } from '@angular/material/card';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatCardModule
+    MatCardModule,
+    BrowserModule,
+    AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [],
   bootstrap: [AppComponent]
