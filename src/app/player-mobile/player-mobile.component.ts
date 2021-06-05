@@ -10,6 +10,7 @@ export class PlayerMobileComponent implements OnInit {
 
   @Input() name: any;
   @Input() playerActive: boolean = false;
+  @Input() profile: string = 'profile.png';
   constructor() { }
 
   ngOnInit(): void {

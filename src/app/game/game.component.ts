@@ -6,6 +6,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
+import { EditPlayerComponent } from '../edit-player/edit-player.component';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 
@@ -18,6 +19,7 @@ export class GameComponent implements OnInit {
   
   game: any;
   gameId: string = '';
+  gameOver: boolean = false;
 
   constructor(
     private router: ActivatedRoute,
@@ -37,6 +39,7 @@ export class GameComponent implements OnInit {
         .subscribe((gameParam: any) => {
           console.log('Game update:', gameParam);
           this.game.players = gameParam.players;
+          this.game.playerProfiles = gameParam.playerProfiles;
           this.game.stack = gameParam.stack;
           this.game.playedCards = gameParam.playedCards;
           this.game.currentPlayer = gameParam.currentPlayer;
@@ -51,6 +54,10 @@ export class GameComponent implements OnInit {
   }
 
   takeCard() {
+    if(this.game.stack.length < 52){
+      this.gameOver = true;
+    }
+
     if (!this.game.pickCardAnimation) {
       this.game.currentCard = this.game.stack[this.game.stack.length - 1];
       console.log(this.game.currentCard);
@@ -80,6 +87,7 @@ export class GameComponent implements OnInit {
     dialogRef.afterClosed().subscribe((name: string) => {
       if (name && name.length > 0) {
         this.game.players.push(name);
+        this.game.playerProfiles.push('Profile.png');
         this.saveGame();
       }
     });
@@ -92,5 +100,28 @@ export class GameComponent implements OnInit {
       .collection('games')
       .doc(this.gameId)
       .update(this.game.toJson());
+  }
+
+  editPlayer(playerId : number){
+    console.log('Edit Player', playerId);
+
+    const dialogRef = this.dialog.open(EditPlayerComponent, {
+    });
+
+    dialogRef.afterClosed().subscribe((change: string) => {
+      console.log('received change', change);
+      if(change){
+        if(change == 'DELETE'){
+          this.game.players.splice(playerId,1);
+          this.game.playerProfiles.splice(playerId,1);
+        }else{
+          this.game.playerProfiles[playerId] = change;
+        }
+        
+        this.saveGame();
+      }
+      
+    });
+    
   }
 }
